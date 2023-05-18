@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 public class Item {
-    private Long id;
+    private Integer id;
     @NotBlank(message = "название не может быть пустым")
     @Size(min = 1, max = 50, message = "максимальная длина длина — 50 символов")
     private String name;
