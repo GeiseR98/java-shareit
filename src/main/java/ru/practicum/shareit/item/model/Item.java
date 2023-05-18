@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,6 @@ import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
-@Builder
 public class Item {
     private Integer id;
     @NotBlank(message = "название не может быть пустым")
@@ -21,8 +21,8 @@ public class Item {
     @Size(min = 1, max = 88, message = "максимальная длина описания — 88 символов")
     private String description;
     @NotNull
-    private boolean available;
+    private Boolean available;
     @NotNull
-    private User owner;
-    private Long request;
+    private Integer owner;
+    private Integer requestId;
 }
