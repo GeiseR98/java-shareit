@@ -16,7 +16,7 @@ public class ItemMapper {
         );
     }
 
-    public static Item toEntity(Integer ownerId, ItemDto itemDto) {
+    public static Item toItem(Integer ownerId, ItemDto itemDto) {
         return new Item(
                 itemDto.getId(),
                 itemDto.getName(),
