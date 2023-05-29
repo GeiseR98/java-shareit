@@ -20,6 +20,6 @@ public class Item {
     @NotNull
     private Boolean available;
     @NotNull
-    private Integer owner;
+    private Integer ownerId;
     private Integer requestId;
 }

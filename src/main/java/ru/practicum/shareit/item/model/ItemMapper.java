@@ -6,7 +6,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 @AllArgsConstructor
 public class ItemMapper {
 
-    public static ItemDto toItemDto(Item item) {
+    public static ItemDto toDto(Item item) {
         return new ItemDto(
                 item.getId(),
                 item.getName(),
