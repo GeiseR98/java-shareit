@@ -22,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository{
         if (userEmails.contains(user.getEmail())) {
             throw new AlreadyExistException("Пользователь с таким email уже существует");
         }
-        user.setId(id++);
+        user.setId(++id);
         users.put(user.getId(), user);
         userEmails.add(user.getEmail());
         return user;
