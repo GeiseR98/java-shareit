@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemService;
 
 import javax.validation.Valid;
@@ -21,13 +20,13 @@ public class ItemController {
     private static final String USERID = "X-Sharer-User-Id";
 
     @GetMapping
-    public Collection<Item> getAllItems(@RequestHeader(USERID) Integer userId) {
+    public Collection<ItemDto> getAllItems(@RequestHeader(USERID) Integer userId) {
         log.info("Колличество вещей пользователя {}: {}", userId, itemService.getByUserId(userId).size());
         return itemService.getByUserId(userId);
     }
 
     @PostMapping
-    public Item save(@RequestHeader(USERID) Integer userId,
+    public ItemDto save(@RequestHeader(USERID) Integer userId,
                      @RequestBody @Valid ItemDto itemDto) throws ValidationException {
         log.info("Попытка добавления вещи {}", itemDto);
         return itemService.save(userId, itemDto);

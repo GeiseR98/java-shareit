@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.AlreadyExistException;
+import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
@@ -19,29 +17,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
         log.info("Количество пользователей: {}", userService.getAll());
         return userService.getAll();
     }
 
     @PostMapping
-    public User save(@RequestBody @Valid User user) {
-        log.info("Попытка добавить пользователя: {}", user);
+    public UserDto save(@RequestBody @Valid UserDto userDto) {
+        log.info("Попытка добавить пользователя: {}", userDto);
         try {
-            return userService.save(user);
+            return userService.save(userDto);
         } catch (AlreadyExistException e) {
             throw new AlreadyExistException("Пользователь с таким email уже существует");
         }
     }
 
     @PatchMapping("/{userId}")
-    public User update(@RequestBody User user, @PathVariable Integer userId) {
-        log.info("Попытка обновить пользователя: {}", user);
-        return userService.update(userId, user);
+    public UserDto update(@RequestBody UserDto userdto, @PathVariable Integer userId) {
+        log.info("Попытка обновить пользователя: {}", userdto);
+        return userService.update(userId, userdto);
     }
 
     @GetMapping("/{userId}")
-    public User getById(@PathVariable Integer userId) {
+    public UserDto getById(@PathVariable Integer userId) {
         log.info("Попытка получить пользователя с id: {}", userId);
         return userService.getById(userId);
     }

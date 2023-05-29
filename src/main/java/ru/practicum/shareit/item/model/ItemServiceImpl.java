@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,19 +22,21 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
 
     @Override
-    public Item save(Integer userId, ItemDto itemDto) {
+    public ItemDto save(Integer userId, ItemDto itemDto) {
         userRepository.getById(userId);
         Item item = ItemMapper.toItem(userId, itemDto);
         if (item.getAvailable() == null || !item.getAvailable()) {
             throw new ValidationException("Вещь должна быть доступна");
         }
-        return itemRepository.save(item);
+        return ItemMapper.toDto(itemRepository.save(item));
     }
 
     @Override
-    public Collection<Item> getByUserId(Integer userId) {
+    public Collection<ItemDto> getByUserId(Integer userId) {
         userRepository.getById(userId);
-        return itemRepository.getItemsByUserId(userId);
+        return itemRepository.getItemsByUserId(userId).stream()
+                .map(ItemMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override

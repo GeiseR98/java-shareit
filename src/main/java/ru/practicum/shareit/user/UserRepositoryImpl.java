@@ -39,20 +39,15 @@ public class UserRepositoryImpl implements UserRepository {
                 throw new AlreadyExistException("Пользователь с таким email уже существует");
             }
         }
-
-        for (User userTemp : users.values()) {
-            if (userTemp.getId().equals(user.getId())) {
-                if (user.getName() == null) {
-                    user.setName(userTemp.getName());
-                }
-                if (user.getEmail() == null) {
-                    user.setEmail(userTemp.getEmail());
-                }
-                users.replace(user.getId(), user);
-                userEmails.remove(userTemp.getEmail());
-                userEmails.add(user.getEmail());
-            }
+        if (user.getName() == null) {
+            user.setName(users.get(user.getId()).getName());
         }
+        if (user.getEmail() == null) {
+            user.setEmail(users.get(user.getId()).getEmail());
+        }
+        userEmails.remove(users.get(user.getId()).getEmail());
+        users.replace(user.getId(), user);
+        userEmails.add(user.getEmail());
         return user;
     }
 

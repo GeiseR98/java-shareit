@@ -6,9 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ItemService {
-    Item save(Integer userId, ItemDto itemDto);
+    ItemDto save(Integer userId, ItemDto itemDto);
 
-    Collection<Item> getByUserId(Integer userId);
+    Collection<ItemDto> getByUserId(Integer userId);
 
     ItemDto getById(Integer itemId);
 
