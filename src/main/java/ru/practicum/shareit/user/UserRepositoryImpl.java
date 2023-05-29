@@ -7,7 +7,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import java.util.*;
 
 @Component
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
     private final Map<Integer, User> users = new HashMap<>();
     private final Set<String> userEmails = new HashSet<>();
     private int id = 0;

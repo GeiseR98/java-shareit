@@ -16,7 +16,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
