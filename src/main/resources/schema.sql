@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    name        varchar(100),
-    description varchar(200),
+    name        varchar(50),
+    description varchar(88),
     available   varchar(50),
     owner_id     BIGINT                              NOT NULL,
     request_id   BIGINT,
@@ -27,8 +27,29 @@ CREATE TABLE IF NOT EXISTS bookings
     finish  timestamp,
     item_id BIGINT                              NOT NULL,
     user_id BIGINT                              NOT NULL,
-    status  varchar(200),
-    CONSTRAINT fk_booking_to_users FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_booking_to_items FOREIGN KEY (item_id) REFERENCES items (id),
+    status  varchar,
+    CONSTRAINT fk_bookings_to_users FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_bookings_to_items FOREIGN KEY (item_id) REFERENCES items (id),
     UNIQUE (id)
+);
+
+CREATE TABLE IF NOT EXISTS requests
+(
+    id              BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+    description     varchar(88),
+    user_id         BIGINT                              NOT NULL,
+    created         timestamp,
+    CONSTRAINT fk_requests_to_users FOREIGN KEY (user_id) REFERENCES users (id),
+    UNIQUE (id)
+);
+
+CREATE TABLE IF NOT EXISTS comments
+(
+    id          BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+    text        VARCHAR(1000),
+    item_id     BIGINT                              NOT NULL,
+    user_id     BIGINT                              NOT NULL,
+    created     timestamp,
+    CONSTRAINT items FOREIGN KEY (item_id) REFERENCES items (id),
+    CONSTRAINT users FOREIGN KEY (user_id) REFERENCES users (id)
 );
