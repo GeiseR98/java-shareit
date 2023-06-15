@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import lombok.AllArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.user.User;
 
 @AllArgsConstructor
 public class ItemMapper {
@@ -12,11 +13,11 @@ public class ItemMapper {
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                item.getRequestId() != null ? item.getRequestId() : null
+                item.getRequest() != null ? item.getRequest() : null
         );
     }
 
-    public static Item toItem(Integer ownerId, ItemDto itemDto) {
+    public static Item toItem(User ownerId, ItemDto itemDto) {
         return new Item(
                 itemDto.getId(),
                 itemDto.getName(),

@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 
@@ -19,8 +20,8 @@ public class Item {
     private String description;
     @Column
     private Boolean available;
-//    @ManyToOne
-    private Integer ownerId;
+    @ManyToOne
+    private User owner;
     @Column
-    private Integer requestId;
+    private Integer request;
 }

@@ -24,7 +24,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto save(Integer userId, ItemDto itemDto) {
         userRepository.getById(userId);
-        Item item = ItemMapper.toItem(userId, itemDto);
+        Item item = ItemMapper.toItem(userRepository.getById(userId), itemDto);
         if (item.getAvailable() == null || !item.getAvailable()) {
             throw new ValidationException("Вещь должна быть доступна");
         }
@@ -49,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
         userRepository.getById(userId);
         itemDto.setId(itemId);
         validate(userId, itemRepository.getItemById(itemDto.getId()));
-        return ItemMapper.toDto(itemRepository.update(ItemMapper.toItem(userId, itemDto)));
+        return ItemMapper.toDto(itemRepository.update(ItemMapper.toItem(userRepository.getById(userId), itemDto)));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void validate(Integer userId, Item item) {
-        if (!Objects.equals(userId, item.getOwnerId())) {
+        if (!Objects.equals(userId, item.getOwner().getId())) {
             throw new NotFoundException("Вы не являетесь владельцем");
         }
     }

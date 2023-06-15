@@ -29,7 +29,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Item save(Item item) {
         item.setId(++id);
-        items.compute(item.getOwnerId(), (userId, userItems) -> {
+        items.compute(item.getOwner().getId(), (userId, userItems) -> {
             if (userItems == null) {
                 userItems = new ArrayList<>();
             }
@@ -55,7 +55,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         if (item.getAvailable() == null) {
             item.setAvailable(existingItem.getAvailable());
         }
-        items.compute(item.getOwnerId(), (userId, userItems) -> {
+        items.compute(item.getOwner().getId(), (userId, userItems) -> {
             int index = userItems.indexOf(existingItem);
             userItems.set(index, item);
             return userItems;
