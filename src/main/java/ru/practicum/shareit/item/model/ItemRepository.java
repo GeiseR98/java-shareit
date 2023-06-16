@@ -1,19 +1,17 @@
 package ru.practicum.shareit.item.model;
 
-import ru.practicum.shareit.item.dto.ItemDto;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ItemRepository {
-    List<Item> getItemsByUserId(Integer userId);
 
-    Item getItemById(Integer id);
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-    Item save(Item item);
-
-    Item update(Item item);
-
-    void removeItemByUserIdAndItemId(Integer userId, Integer itemId);
-
-    List<ItemDto> getItemByQuery(String query);
+//    List<Item> findByUserId(Integer id);
+//
+//    void deleteByUserIdAndId(Integer userId, Integer itemId);
+//
+//    List<Item> findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String query, String query1);
 }

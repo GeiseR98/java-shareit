@@ -1,13 +1,11 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 
 @Data
-@AllArgsConstructor
 @Entity
 @Table(name = "items")
 public class Item {
@@ -21,6 +19,7 @@ public class Item {
     @Column
     private Boolean available;
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User owner;
     @Column
     private Integer request;

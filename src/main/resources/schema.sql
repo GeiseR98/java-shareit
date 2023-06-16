@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS items
     name        varchar(50),
     description varchar(88),
     available   varchar(50),
-    owner_id     BIGINT                              NOT NULL,
+    user_id     BIGINT                              NOT NULL,
     request_id   BIGINT,
-    CONSTRAINT fk_items_to_users FOREIGN KEY (owner_id) REFERENCES users (id),
+    CONSTRAINT fk_items_to_users FOREIGN KEY (user_id) REFERENCES users (id),
     UNIQUE (id)
 );
 
