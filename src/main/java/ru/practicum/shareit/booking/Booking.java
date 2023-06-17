@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
@@ -24,7 +23,7 @@ public class Booking {
     private Item item;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User booker;
+    private User booker; //пользователь, который осуществляет бронирование
     @Enumerated(EnumType.STRING)
     @Column
     private Status status;

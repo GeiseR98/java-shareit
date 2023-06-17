@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -23,7 +25,13 @@ public class Utility {
 
     public void checkOwner(Integer userId, Item item) {
         if (!Objects.equals(userId, item.getOwner().getId())) {
-            throw new NotFoundException("Вы не являетесь владельцем");
+            throw new ValidationException("Вы не являетесь владельцем");
+        }
+    }
+
+    public void checkNotOwner(Integer userId, Item item) {
+        if (Objects.equals(userId, item.getOwner().getId())) {
+            throw new ValidationException("Вы являетесь владельцем");
         }
     }
 
@@ -40,5 +48,11 @@ public class Utility {
     public Item checkItem(Integer itemId) {
         return itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException(String.format("Вещь с идентификатором =%d не найдена", itemId)));
+    }
+
+    public void checkCorrectTime(LocalDateTime start, LocalDateTime end) {
+        if (start.isAfter(end)) {
+            throw new ValidationException("Дата окончания бронирования должна быть после его начала");
+        }
     }
 }
