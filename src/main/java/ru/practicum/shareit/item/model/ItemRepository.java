@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-//    List<Item> findByUserId(Integer id);
-//
-//    void deleteByUserIdAndId(Integer userId, Integer itemId);
-//
-//    List<Item> findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String query, String query1);
+    List<Item> findByOwnerId(Integer id);
+
+    void deleteByOwnerIdAndId(Integer userId, Integer itemId);
+
+    List<Item> findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String query, String query1);
 }
