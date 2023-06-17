@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.utility.Utility;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -24,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
+    private final Utility utility;
 
     @Override
     @Transactional
@@ -32,15 +30,14 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getAvailable() == null || !itemDto.getAvailable()) {
             throw new ValidationException("Вещь должна быть доступна");
         }
-        User user = userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь не найден"));
+        User user = utility.checkUser(userId);
         Item item = ItemMapper.toEntity(user, itemDto);
         return ItemMapper.toDto(itemRepository.save(item));
     }
 
     @Override
     public Collection<ItemDto> getByUserId(Integer userId) {
-        userRepository.findById(userId);
+        utility.checkUser(userId);
         return itemRepository.findByOwnerId(userId).stream()
                 .map(ItemMapper::toDto)
                 .collect(Collectors.toList());
@@ -48,14 +45,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getById(Integer itemId) {
-        return ItemMapper.toDto(itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещь с ID =%d не найдена")));
+        return ItemMapper.toDto(utility.checkItem(itemId));
     }
 
     @Override
     @Transactional
     public ItemDto update(Integer userId, ItemDto itemDto, Integer itemId) {
-        checkUser(userId);
-        Item item = itemRepository.findById(itemId).get();
+        utility.checkUser(userId);
+        Item item = utility.checkItem(itemId);
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
         }
@@ -87,18 +84,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void removeById(Integer userId, Integer itemId) {
-        userRepository.findById(userId);
-        checkOwner(userId, itemRepository.getById(itemId));
+        utility.checkOwner(userId, utility.checkItem(itemId));
         itemRepository.deleteByOwnerIdAndId(userId, itemId);
-    }
-
-    private void checkOwner(Integer userId, Item item) {
-        if (!Objects.equals(userId, item.getOwner().getId())) {
-            throw new NotFoundException("Вы не являетесь владельцем");
-        }
-    }
-
-    private void checkUser(Integer userId) {
-        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 }
