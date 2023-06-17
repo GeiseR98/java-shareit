@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDto update(Integer userId, ItemDto itemDto, Integer itemId) {
-        userRepository.findById(userId);
+        checkUser(userId);
         Item item = itemRepository.findById(itemId).get();
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
@@ -96,5 +96,9 @@ public class ItemServiceImpl implements ItemService {
         if (!Objects.equals(userId, item.getOwner().getId())) {
             throw new NotFoundException("Вы не являетесь владельцем");
         }
+    }
+
+    private void checkUser(Integer userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 }
