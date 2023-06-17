@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @Entity
 @Table(name = "bookings")
 public class Booking {
