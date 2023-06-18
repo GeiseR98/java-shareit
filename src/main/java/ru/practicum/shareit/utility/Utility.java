@@ -51,7 +51,7 @@ public class Utility {
     }
 
     public void checkCorrectTime(LocalDateTime start, LocalDateTime end) {
-        if (start.isAfter(end)) {
+        if (!start.isBefore(end)) {
             throw new ValidationException("Дата окончания бронирования должна быть после его начала");
         }
     }
