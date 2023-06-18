@@ -29,4 +29,12 @@ public class BookingController {
         return bookingService.getBookingById(userId, bookingId);
     }
 
+    @PatchMapping("/{bookingId}")
+    public BookingDto approveBooking(@RequestHeader(USERID) Integer userId,
+                                     @PathVariable Integer bookingId,
+                                     @RequestParam boolean approved) {
+        log.info(String.valueOf("Попытка подтвердить бронирование с ID {}"), bookingId);
+        return bookingService.approveBooking(userId, bookingId, approved);
+    }
+
 }

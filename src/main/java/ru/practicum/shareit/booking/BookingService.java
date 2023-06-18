@@ -7,4 +7,6 @@ public interface BookingService {
 
     BookingDto addNewBooking(Integer userId, BookingDto bookingDto);
 
+    BookingDto approveBooking(Integer userId, Integer bookingId, boolean approve);
+
 }

@@ -40,6 +40,17 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toDto(bookingRepository.save(booking));
     }
 
+    @Override
+    public BookingDto approveBooking(Integer userId, Integer bookingId, boolean approve) {
+        utility.checkUser(userId);
+        Booking booking = utility.checkBooking(bookingId);
+        if (booking.getStatus().equals(Status.APPROVED)) {
+            throw new ValidationException("Вещь уже забронирована");
+        }
+        utility.checkOwner(userId, booking.getItem());
+        booking.setStatus(approve ? Status.APPROVED : Status.REJECTED);
+        return BookingMapper.toDto(bookingRepository.save(booking));
+    }
 
     @Override
     public BookingDto getBookingById(Integer userId, Integer bookingId) {
@@ -52,6 +63,7 @@ public class BookingServiceImpl implements BookingService {
         }
         throw new NotFoundException(String.format("Пользователь с ID =%d не является владельцом вещи", userId));
     }
+
 
 
 }
