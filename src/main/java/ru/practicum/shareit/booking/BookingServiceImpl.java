@@ -13,6 +13,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -51,6 +52,19 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(approve ? Status.APPROVED : Status.REJECTED);
         return BookingMapper.toDto(bookingRepository.save(booking));
     }
+
+    @Override
+    public List<BookingDto> getByUserId(Integer userId, String state) {
+        utility.checkUser(userId);
+        Status status = Status.valueOf(state.toUpperCase());
+        switch (status) {
+            case ALL:
+                return BookingMapper.toDtoList(bookingRepository.findByUserId(userId));
+        }
+
+        return null;
+    }
+
 
     @Override
     public BookingDto getBookingById(Integer userId, Integer bookingId) {

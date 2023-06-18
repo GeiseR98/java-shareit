@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/bookings")
@@ -35,6 +36,13 @@ public class BookingController {
                                      @RequestParam boolean approved) {
         log.info(String.valueOf("Попытка подтвердить бронирование с ID {}"), bookingId);
         return bookingService.approveBooking(userId, bookingId, approved);
+    }
+
+    @GetMapping
+    public List<BookingDto> getByUserId(@RequestHeader(USERID) Integer userId,
+                                        @RequestParam(defaultValue = "ALL") String state) {
+        log.info("Потытка получить бронирование по ID пользователя: {}", userId);
+        return bookingService.getByUserId(userId, state);
     }
 
 }
