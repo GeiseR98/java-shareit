@@ -60,6 +60,8 @@ public class BookingServiceImpl implements BookingService {
         switch (status) {
             case ALL:
                 return BookingMapper.toDtoList(bookingRepository.findByUserId(userId));
+            case CURRENT:
+                return BookingMapper.toDtoList(bookingRepository.findCurrentByUserId(userId));
         }
 
         return null;
