@@ -9,7 +9,6 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
 import java.util.List;
@@ -38,6 +37,7 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toDto(bookingRepository.save(booking));
     }
 
+    @Transactional
     @Override
     public BookingDto approveBooking(Integer userId, Integer bookingId, boolean approve) {
         utility.checkUser(userId);
@@ -46,8 +46,13 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("Вещь уже забронирована");
         }
         utility.checkOwner(userId, booking.getItem());
-        booking.setStatus(approve ? Status.APPROVED : Status.REJECTED);
-        return BookingMapper.toDto(bookingRepository.save(booking));
+        if (approve) {
+            booking.setStatus(Status.APPROVED);
+        } else {
+            booking.setStatus(Status.REJECTED);
+        }
+        bookingRepository.save(booking);
+        return BookingMapper.toDto(booking);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED));
         }
-        throw new ValidationException("Неизвестный статус");
+        throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
     }
 
     @Override
@@ -89,7 +94,7 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 return BookingMapper.toDtoList(bookingRepository.findBookingByOwnerIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED));
         }
-        throw new ValidationException("Неизвестный статус");
+        throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
     }
 
 
