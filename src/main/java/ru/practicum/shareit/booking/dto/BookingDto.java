@@ -26,36 +26,4 @@ public class BookingDto {
     private User booker;
     private Item item;
 
-/*
-PASS
-Status code is 200
-PASS
-Has booking patch response
-PASS
-Test booking 'id' field
-FAIL
-Test booking 'start' field | AssertionError: "start" must be "undefined": expected '2023-06-20T15:34:12' to deeply equal undefined
-FAIL
-Test booking 'end' field | AssertionError: "end" must be "undefined": expected '2023-06-20T15:34:13' to deeply equal undefined
-PASS
-Test booking 'status' field
-PASS
-Test booking 'booker.id' field
-PASS
-Test booking 'item.id' field
-PASS
-Test booking 'item.name' field
-*/
-    /*
-    pm.test("Test booking 'start' field", function () {
-    var jsonData = pm.response.json();
-    pm.expect(jsonData).to.have.property('start');
-    pm.expect(jsonData.start, '"start"  must be "' + pm.environment.get('start') + '"').to.eql(pm.environment.get('start'));
-});
-pm.test("Test booking 'end' field", function () {
-    var jsonData = pm.response.json();
-    pm.expect(jsonData).to.have.property('end');
-    pm.expect(jsonData.end, '"end"  must be "' + pm.environment.get('end') + '"').to.eql(pm.environment.get('end'));
-});
-     */
 }
