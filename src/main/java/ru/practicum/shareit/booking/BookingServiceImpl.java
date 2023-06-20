@@ -70,6 +70,27 @@ public class BookingServiceImpl implements BookingService {
         throw new ValidationException("Неизвестный статус");
     }
 
+    @Override
+    public List<BookingDto> getByOwnerId(Integer userId, String state) {
+        utility.checkUser(userId);
+        Status status = Status.valueOf(state.toUpperCase());
+        switch (status) {
+            case ALL:
+                return BookingMapper.toDtoList(bookingRepository.findByOwnerId(userId));
+            case CURRENT:
+                return BookingMapper.toDtoList(bookingRepository.findCurrentByOwnerId(userId));
+            case PAST:
+                return BookingMapper.toDtoList(bookingRepository.findPastByOwnerId(userId));
+            case FUTURE:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByOwnerIdAndStarBeforeNow(userId));
+            case WAITING:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByOwnerIdAndByStatusContainingIgnoreCase(userId, Status.WAITING));
+            case REJECTED:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByOwnerIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED));
+        }
+        throw new ValidationException("Неизвестный статус");
+    }
+
 
     @Override
     public BookingDto getBookingById(Integer userId, Integer bookingId) {

@@ -45,4 +45,10 @@ public class BookingController {
         return bookingService.getByUserId(userId, state);
     }
 
+    @GetMapping("/owner")
+    public List<BookingDto> getByOwnerId(@RequestHeader(USERID) Integer userId,
+                                         @RequestParam(defaultValue = "ALL") String state) {
+        log.info(String.valueOf("Потытка получить бронирование по ID владельца: {}"), userId);
+        return bookingService.getByOwnerId(userId, state);
+    }
 }

@@ -12,4 +12,7 @@ public interface BookingService {
     BookingDto approveBooking(Integer userId, Integer bookingId, boolean approve);
 
     List<BookingDto> getByUserId(Integer userId, String state);
+
+    List<BookingDto> getByOwnerId(Integer userId, String state);
+
 }
