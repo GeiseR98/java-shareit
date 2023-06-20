@@ -43,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
         utility.checkUser(userId);
         Booking booking = utility.checkBooking(bookingId);
         if (booking.getStatus().equals(Status.APPROVED)) {
-            throw new ValidationException("Вещь уже забронирована");
+            throw new NotFoundException("Вещь уже забронирована");
         }
         utility.checkOwner(userId, booking.getItem());
         if (approve) {

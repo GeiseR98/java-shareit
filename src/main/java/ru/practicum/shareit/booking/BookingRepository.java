@@ -3,8 +3,11 @@ package ru.practicum.shareit.booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.item.model.Item;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
@@ -91,5 +94,11 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "and b.status LIKE ?2 " +
             "ORDER BY b.start DESC")
     List<Booking> findBookingByOwnerIdAndByStatusContainingIgnoreCase(Integer userId, Status state);
+
+    Optional<Booking> findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(Integer id, LocalDateTime start, Status status);
+
+    Optional<Booking> findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(Integer id, LocalDateTime end, Status status);
+
+    List<Booking> findByItemIn(Iterable<Item> items);
 
 }

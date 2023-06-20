@@ -17,4 +17,8 @@ public interface ItemService {
     List<ItemDto> getByQuery(String query);
 
     void removeById(Integer userId, Integer itemId);
+
+    ItemWithBooking getItemById(Integer userId, Integer itemId);
+
+    Collection<ItemWithBooking> getItemsByUserId(Integer userId);
 }
