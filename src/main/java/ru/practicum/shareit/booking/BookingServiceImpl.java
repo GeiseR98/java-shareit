@@ -64,9 +64,14 @@ public class BookingServiceImpl implements BookingService {
                 return BookingMapper.toDtoList(bookingRepository.findCurrentByUserId(userId));
             case PAST:
                 return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndFinishAfterNow(userId));
+            case FUTURE:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndStarBeforeNow(userId));
+            case WAITING:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndByStatusContainingIgnoreCase(userId, Status.WAITING));
+            case REJECTED:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED));
         }
-
-        return null;
+        throw new ValidationException("Неизвестный статус");
     }
 
 

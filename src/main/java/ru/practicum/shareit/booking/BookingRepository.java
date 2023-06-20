@@ -32,5 +32,20 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "ORDER BY b.start DESC")
     List<Booking> findBookingByUserIdAndFinishAfterNow(Integer userId);
 
+    @Query("SELECT b " +
+            "FROM Booking AS b " +
+            "JOIN b.booker AS u " +
+            "WHERE u.id = ?1 " +
+            "and b.start > current_timestamp " +
+            "ORDER BY b.start DESC")
+    List<Booking> findBookingByUserIdAndStarBeforeNow(Integer userId);
+
+    @Query("SELECT b " +
+            "FROM Booking AS b " +
+            "JOIN b.booker AS u " +
+            "WHERE u.id = ?1 " +
+            "and b.status LIKE ?2 " +
+            "ORDER BY b.start DESK")
+    List<Booking> findBookingByUserIdAndByStatusContainingIgnoreCase(Integer userId, Status state);
 
 }
