@@ -62,6 +62,8 @@ public class BookingServiceImpl implements BookingService {
                 return BookingMapper.toDtoList(bookingRepository.findByUserId(userId));
             case CURRENT:
                 return BookingMapper.toDtoList(bookingRepository.findCurrentByUserId(userId));
+            case PAST:
+                return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndFinishAfterNow(userId));
         }
 
         return null;

@@ -23,4 +23,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "AND b.start < current_timestamp AND b.end > current_timestamp " +
             "ORDER BY b.start DESC")
     List<Booking> findCurrentByUserId(Integer userId);
+
+    @Query("SELECT b " +
+            "FROM Booking AS b " +
+            "JOIN b.booker AS u " +
+            "WHERE u.id = ?1 " +
+            "and b.end < current_timestamp " +
+            "ORDER BY b.start DESC")
+    List<Booking> findBookingByUserIdAndFinishAfterNow(Integer userId);
+
+
 }
