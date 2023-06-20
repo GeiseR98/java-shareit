@@ -8,9 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemRepository;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
 import java.util.List;
@@ -21,8 +19,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class BookingServiceImpl implements BookingService {
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final Utility utility;
 

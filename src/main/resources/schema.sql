@@ -8,6 +8,16 @@ CREATE TABLE IF NOT EXISTS users
     UNIQUE (email)
 );
 
+CREATE TABLE IF NOT EXISTS requests
+(
+    id              BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+    description     varchar(88),
+    user_id         BIGINT                              NOT NULL,
+    created         timestamp,
+    CONSTRAINT fk_requests_to_users FOREIGN KEY (user_id) REFERENCES users (id),
+    UNIQUE (id)
+);
+
 CREATE TABLE IF NOT EXISTS items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
@@ -31,16 +41,6 @@ CREATE TABLE IF NOT EXISTS bookings
     status  varchar,
     CONSTRAINT fk_bookings_to_users FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT fk_bookings_to_items FOREIGN KEY (item_id) REFERENCES items (id),
-    UNIQUE (id)
-);
-
-CREATE TABLE IF NOT EXISTS requests
-(
-    id              BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    description     varchar(88),
-    user_id         BIGINT                              NOT NULL,
-    created         timestamp,
-    CONSTRAINT fk_requests_to_users FOREIGN KEY (user_id) REFERENCES users (id),
     UNIQUE (id)
 );
 

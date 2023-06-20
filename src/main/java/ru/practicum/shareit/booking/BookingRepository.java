@@ -31,7 +31,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "and b.end < current_timestamp " +
             "ORDER BY b.start DESC")
     List<Booking> findBookingByUserIdAndFinishAfterNow(Integer userId);
-
+//
     @Query("SELECT b " +
             "FROM Booking AS b " +
             "JOIN b.booker AS u " +
@@ -45,7 +45,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "JOIN b.booker AS u " +
             "WHERE u.id = ?1 " +
             "and b.status LIKE ?2 " +
-            "ORDER BY b.start DESK")
+            "ORDER BY b.start DESC")
     List<Booking> findBookingByUserIdAndByStatusContainingIgnoreCase(Integer userId, Status state);
 
 }
