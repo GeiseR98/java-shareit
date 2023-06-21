@@ -9,6 +9,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @Slf4j
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
     private final Utility utility;
 
     @Transactional
@@ -40,12 +42,17 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     @Override
     public BookingDto approveBooking(Integer userId, Integer bookingId, boolean approve) {
-        utility.checkUser(userId);
-        Booking booking = utility.checkBooking(bookingId);
+        userRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException("Пользователь не найден"));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
+                new NotFoundException(String.format("Бронирование не найдено", bookingId)));
         if (booking.getStatus().equals(Status.APPROVED)) {
-            throw new NotFoundException("Вещь уже забронирована");
+            throw new ValidationException(String.format("Бронирование с ID =%d уже подтверждена", bookingId));
         }
-        utility.checkOwner(userId, booking.getItem());
+        User owner = booking.getItem().getOwner();
+        if (!Objects.equals(userId, owner.getId())) {
+            throw new NotFoundException(String.format("Вы не являетесь владельцем", bookingId));
+        }
         if (approve) {
             booking.setStatus(Status.APPROVED);
         } else {
