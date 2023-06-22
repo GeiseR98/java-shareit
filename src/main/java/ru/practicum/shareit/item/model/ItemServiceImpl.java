@@ -172,6 +172,7 @@ public class ItemServiceImpl implements ItemService {
 
         return itemWithBookings;
     }
+
     private BookingDto getLastBookingDtoForItem(Item item, LocalDateTime now, List<Booking> bookings) {
         return bookings.stream()
                 .filter(booking -> booking.getStart().isBefore(now))
