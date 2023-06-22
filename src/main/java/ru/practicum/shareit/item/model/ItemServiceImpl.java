@@ -154,7 +154,7 @@ public class ItemServiceImpl implements ItemService {
         List<ItemWithBooking> itemWithBookings = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        Map<Item, List<Comment>> comments = commentRepository.findByItemIn(items)
+        Map<Item, List<Comment>> comments = commentRepository.findByItemIn(items,  Sort.by(Sort.Direction.DESC, "created"))
                 .stream()
                 .collect(Collectors.groupingBy(Comment::getItem));
 
