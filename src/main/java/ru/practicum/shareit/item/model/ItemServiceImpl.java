@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingMapper;
-import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.Status;
+import ru.practicum.shareit.booking.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -28,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final BookingRepository bookingRepository;
+    private final BookingService bookingService;
     private final Utility utility;
     private final CommentRepository commentRepository;
 
@@ -105,9 +102,9 @@ public class ItemServiceImpl implements ItemService {
         if (Objects.equals(userId, item.getOwner().getId())) {
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            Optional<Booking> lastBookingOptional = bookingRepository
+            Optional<Booking> lastBookingOptional = bookingService
                     .findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(item.getId(), currentDateTime, Status.APPROVED);
-            Optional<Booking> nextBookingOptional = bookingRepository
+            Optional<Booking> nextBookingOptional = bookingService
                     .findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(item.getId(), currentDateTime, Status.APPROVED);
 
             if (lastBookingOptional.isPresent()) {
@@ -132,7 +129,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addNewComment(Integer userId, CommentDto commentDto, Integer itemId) {
-        List<Booking> bookings = bookingRepository.findBookingByUserIdAndFinishAfterNow(userId);
+        List<Booking> bookings = bookingService.findBookingByUserIdAndFinishAfterNow(userId);
         boolean userIsBooker = bookings.stream()
                 .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
 
@@ -158,7 +155,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .collect(Collectors.groupingBy(Comment::getItem));
 
-        Map<Item, List<Booking>> bookingsMap = bookingRepository.findByItemIn(items)
+        Map<Item, List<Booking>> bookingsMap = bookingService.findByItemIn(items)
                 .stream()
                 .collect(Collectors.groupingBy(Booking::getItem));
 

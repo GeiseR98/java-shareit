@@ -11,8 +11,10 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.utility.Utility;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -94,6 +96,26 @@ public class BookingServiceImpl implements BookingService {
                 return BookingMapper.toDtoList(bookingRepository.findBookingByOwnerIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED));
         }
         throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
+    }
+
+    @Override
+    public Optional<Booking> findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(Integer id, LocalDateTime start, Status status) {
+        return bookingRepository.findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(id, start, status);
+    }
+
+    @Override
+    public Optional<Booking> findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(Integer id, LocalDateTime end, Status status) {
+        return bookingRepository.findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(id, end, status);
+    }
+
+    @Override
+    public List<Booking> findBookingByUserIdAndFinishAfterNow(Integer userId) {
+        return bookingRepository.findBookingByUserIdAndFinishAfterNow(userId);
+    }
+
+    @Override
+    public List<Booking> findByItemIn(Iterable<Item> items) {
+        return bookingRepository.findByItemIn(items);
     }
 
 
