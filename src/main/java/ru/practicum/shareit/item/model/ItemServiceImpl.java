@@ -140,11 +140,11 @@ public class ItemServiceImpl implements ItemService {
             throw new ru.practicum.shareit.exception.ValidationException("Пользователь не брал в аренду вещь");
         }
 
+        User user = utility.checkUser(userId);
         Item item = utility.checkItem(itemId);
 
-        Comment comment = CommentMapper.toEntity(item, commentDto);
+        Comment comment = CommentMapper.toEntity(user, item, commentDto);
 
-        comment.setAuthor(utility.checkUser(userId));
         comment.setCreated(LocalDateTime.now());
 
         return CommentMapper.toDto(commentRepository.save(comment));

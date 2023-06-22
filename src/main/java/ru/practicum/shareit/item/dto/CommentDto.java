@@ -16,10 +16,9 @@ public class CommentDto {
 
     private Integer itemId;
 
-    private User author;
-
     private LocalDateTime created;
 
     @NotBlank(message = "Комментарий не может быть пустым")
     private String text;
+    private String authorName;
 }
