@@ -23,7 +23,7 @@ public class Booking {
     private Item item;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User booker; //пользователь, который осуществляет бронирование
+    private User booker;
     @Enumerated(EnumType.STRING)
     @Column
     private Status status;

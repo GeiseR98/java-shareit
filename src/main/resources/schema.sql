@@ -51,6 +51,6 @@ CREATE TABLE IF NOT EXISTS comments
     item_id     BIGINT                              NOT NULL,
     user_id     BIGINT                              NOT NULL,
     created     timestamp,
-    CONSTRAINT items FOREIGN KEY (item_id) REFERENCES items (id),
-    CONSTRAINT users FOREIGN KEY (user_id) REFERENCES users (id)
+    CONSTRAINT fk_comments_to_items FOREIGN KEY (item_id) REFERENCES items (id),
+    CONSTRAINT fk_comments_to_users FOREIGN KEY (user_id) REFERENCES users (id)
 );

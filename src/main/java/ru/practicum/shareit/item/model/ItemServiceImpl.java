@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -119,7 +120,8 @@ public class ItemServiceImpl implements ItemService {
                 }
             }
         }
-        return ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking, new ArrayList<>());
+        List<CommentDto> comments = CommentMapper.toDtoList(commentRepository.findAllByItemId(itemId));
+        return ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking, comments);
     }
 
     @Override
@@ -152,6 +154,10 @@ public class ItemServiceImpl implements ItemService {
         List<ItemWithBooking> itemWithBookings = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
+        Map<Item, List<Comment>> comments = commentRepository.findByItemIn(items)
+                .stream()
+                .collect(Collectors.groupingBy(Comment::getItem));
+
         Map<Item, List<Booking>> bookingsMap = bookingRepository.findByItemIn(items)
                 .stream()
                 .collect(Collectors.groupingBy(Booking::getItem));
@@ -159,7 +165,9 @@ public class ItemServiceImpl implements ItemService {
         for (Item item : items) {
             BookingDto lastBooking = getLastBookingDtoForItem(item, now, bookingsMap.getOrDefault(item, Collections.emptyList()));
             BookingDto nextBooking = getNextBookingDtoForItem(item, now, bookingsMap.getOrDefault(item, Collections.emptyList()));
-            itemWithBookings.add(ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking, new ArrayList<>()));
+            List<CommentDto> itemComments = CommentMapper.toDtoList(comments.getOrDefault(item, Collections.emptyList()));
+            itemWithBookings.add(ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking, itemComments));
+
         }
 
         return itemWithBookings;
