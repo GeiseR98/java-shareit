@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.model;
 
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Collection;
@@ -21,4 +22,6 @@ public interface ItemService {
     ItemWithBooking getItemById(Integer userId, Integer itemId);
 
     Collection<ItemWithBooking> getItemsByUserId(Integer userId);
+
+    CommentDto addNewComment(Integer userId, CommentDto commentDto, Integer itemId);
 }

@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.utility.Utility;
@@ -30,6 +31,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final Utility utility;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -127,6 +129,28 @@ public class ItemServiceImpl implements ItemService {
         utility.checkUser(userId);
         return mapToItemWithBooking(itemRepository.findByOwnerId(userId));
     }
+
+    @Override
+    public CommentDto addNewComment(Integer userId, CommentDto commentDto, Integer itemId) {
+        List<Booking> bookings = bookingRepository.findBookingByUserIdAndFinishAfterNow(userId);
+        boolean userIsBooker = bookings.stream()
+                .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
+
+        if (!userIsBooker) {
+            throw new ru.practicum.shareit.exception.ValidationException("Пользователь не брал в аренду вещь");
+        }
+
+        Item item = utility.checkItem(itemId);
+
+        Comment comment = CommentMapper.toEntity(item, commentDto);
+
+        comment.setAuthorName(utility.checkUser(userId)
+                .getName());
+        comment.setCreated(LocalDateTime.now());
+
+        return CommentMapper.toDto(commentRepository.save(comment));
+    }
+
     private List<ItemWithBooking> mapToItemWithBooking(Iterable<Item> items) {
         List<ItemWithBooking> itemWithBookings = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
@@ -158,6 +182,8 @@ public class ItemServiceImpl implements ItemService {
                 .map(BookingMapper::toDto)
                 .orElse(null);
     }
+
+
 
 
 }

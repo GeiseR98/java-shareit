@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.ItemService;
 import ru.practicum.shareit.item.model.ItemWithBooking;
@@ -60,5 +61,13 @@ public class ItemController {
     public List<ItemDto> getByQuery(@RequestParam(name = "text") String query) {
         log.info("Попытка найти вещь по зпросу: {}", query);
         return itemService.getByQuery(query);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@RequestHeader(USERID) Integer userId,
+                                 @RequestBody @Valid CommentDto commentDto,
+                                 @PathVariable Integer itemId) {
+        log.info(String.valueOf("Попытка добавить комментарий"), commentDto);
+        return itemService.addNewComment(userId, commentDto, itemId);
     }
 }
