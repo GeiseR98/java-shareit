@@ -137,7 +137,7 @@ public class ItemServiceImpl implements ItemService {
                 .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
 
         if (!userIsBooker) {
-            throw new ru.practicum.shareit.exception.ValidationException("Пользователь не брал в аренду вещь");
+            throw new ValidationException("Пользователь не брал в аренду вещь");
         }
 
         User user = utility.checkUser(userId);
