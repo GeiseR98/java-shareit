@@ -12,7 +12,7 @@ public class CommentMapper {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setItemId(comment.getItem().getId());
-        commentDto.setAuthorName(comment.getAuthorName());
+        commentDto.setAuthor(comment.getAuthor());
         commentDto.setCreated(comment.getCreated());
         commentDto.setText(comment.getText());
         return commentDto;
@@ -22,7 +22,7 @@ public class CommentMapper {
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
         comment.setItem(item);
-        comment.setAuthorName(commentDto.getAuthorName());
+        comment.setAuthor(commentDto.getAuthor());
         comment.setCreated(commentDto.getCreated());
         comment.setText(commentDto.getText());
         return comment;

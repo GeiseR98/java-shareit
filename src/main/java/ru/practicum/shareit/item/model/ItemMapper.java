@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
 
@@ -29,7 +30,7 @@ public class ItemMapper {
         return item;
     }
 
-    public static ItemWithBooking toEntityWithBooking(Item item, BookingDto lastBooking, BookingDto nextBooking) {
+    public static ItemWithBooking toEntityWithBooking(Item item, BookingDto lastBooking, BookingDto nextBooking, List<CommentDto> comments) {
         ItemWithBooking itemWithBooking = new ItemWithBooking();
         itemWithBooking.setId(item.getId());
         itemWithBooking.setName(item.getName());
@@ -38,6 +39,7 @@ public class ItemMapper {
         itemWithBooking.setAvailable(item.getAvailable());
         itemWithBooking.setLastBooking(lastBooking);
         itemWithBooking.setNextBooking(nextBooking);
+        itemWithBooking.setComments(comments);
         return itemWithBooking;
     }
 }

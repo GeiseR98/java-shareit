@@ -17,8 +17,8 @@ public class Comment {
     @ManyToOne
     private Item item;
 
-    @Column
-    private String authorName;
+    @ManyToOne
+    private User author;
 
     @Column
     private LocalDateTime created;

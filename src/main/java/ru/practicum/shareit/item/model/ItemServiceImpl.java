@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -10,7 +9,6 @@ import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
@@ -121,7 +119,7 @@ public class ItemServiceImpl implements ItemService {
                 }
             }
         }
-        return ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking);
+        return ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking, new ArrayList<>());
     }
 
     @Override
@@ -144,8 +142,7 @@ public class ItemServiceImpl implements ItemService {
 
         Comment comment = CommentMapper.toEntity(item, commentDto);
 
-        comment.setAuthorName(utility.checkUser(userId)
-                .getName());
+        comment.setAuthor(utility.checkUser(userId));
         comment.setCreated(LocalDateTime.now());
 
         return CommentMapper.toDto(commentRepository.save(comment));
@@ -162,7 +159,7 @@ public class ItemServiceImpl implements ItemService {
         for (Item item : items) {
             BookingDto lastBooking = getLastBookingDtoForItem(item, now, bookingsMap.getOrDefault(item, Collections.emptyList()));
             BookingDto nextBooking = getNextBookingDtoForItem(item, now, bookingsMap.getOrDefault(item, Collections.emptyList()));
-            itemWithBookings.add(ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking));
+            itemWithBookings.add(ItemMapper.toEntityWithBooking(item, lastBooking, nextBooking, new ArrayList<>()));
         }
 
         return itemWithBookings;
