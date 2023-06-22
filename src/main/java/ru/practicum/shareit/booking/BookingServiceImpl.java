@@ -9,7 +9,6 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
 import java.util.List;
@@ -21,7 +20,6 @@ import java.util.Objects;
 @Slf4j
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
     private final Utility utility;
 
     @Transactional
@@ -42,24 +40,18 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     @Override
     public BookingDto approveBooking(Integer userId, Integer bookingId, boolean approve) {
-        userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException("Пользователь не найден"));
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
-                new NotFoundException(String.format("Бронирование не найдено", bookingId)));
+        utility.checkUser(userId);
+        Booking booking = utility.checkBooking(bookingId);
         if (booking.getStatus().equals(Status.APPROVED)) {
             throw new ValidationException(String.format("Бронирование с ID =%d уже подтверждена", bookingId));
         }
-        User owner = booking.getItem().getOwner();
-        if (!Objects.equals(userId, owner.getId())) {
-            throw new NotFoundException(String.format("Вы не являетесь владельцем", bookingId));
-        }
+        utility.checkOwner(userId, booking.getItem());
         if (approve) {
             booking.setStatus(Status.APPROVED);
         } else {
             booking.setStatus(Status.REJECTED);
         }
-        bookingRepository.save(booking);
-        return BookingMapper.toDto(booking);
+        return BookingMapper.toDto(bookingRepository.save(booking));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class Utility {
 
     public void checkOwner(Integer userId, Item item) {
         if (!Objects.equals(userId, item.getOwner().getId())) {
-            throw new ValidationException("Вы не являетесь владельцем");
+            throw new NotFoundException("Вы не являетесь владельцем");
         }
     }
 
