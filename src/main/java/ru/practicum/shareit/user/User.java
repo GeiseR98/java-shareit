@@ -3,6 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity

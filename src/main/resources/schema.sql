@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS users, items, bookings, comments CASCADE;
 CREATE TABLE IF NOT EXISTS users
 (
     id    BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    name  varchar(250)                        NOT NULL,
+    name  varchar(50)                        NOT NULL,
     email varchar(100)                        NOT NULL,
     UNIQUE (email)
 );
