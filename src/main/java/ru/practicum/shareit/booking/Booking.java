@@ -1,28 +1,30 @@
 package ru.practicum.shareit.booking;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
+@Entity
+@Table(name = "bookings")
 public class Booking {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull
+    @Column
     private LocalDateTime start;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull
+    @Column(name = "finish")
     private LocalDateTime end;
-    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "item_id")
     private Item item;
-    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User booker;
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column
     private Status status;
 }
