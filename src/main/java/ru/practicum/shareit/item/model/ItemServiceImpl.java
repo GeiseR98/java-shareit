@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final BookingService bookingService;
+    private final BookingRepository bookingRepository;
     private final Utility utility;
     private final CommentRepository commentRepository;
 
@@ -102,9 +102,9 @@ public class ItemServiceImpl implements ItemService {
         if (Objects.equals(userId, item.getOwner().getId())) {
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            Optional<Booking> lastBookingOptional = bookingService
+            Optional<Booking> lastBookingOptional = bookingRepository
                     .findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(item.getId(), currentDateTime, Status.APPROVED);
-            Optional<Booking> nextBookingOptional = bookingService
+            Optional<Booking> nextBookingOptional = bookingRepository
                     .findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(item.getId(), currentDateTime, Status.APPROVED);
 
             if (lastBookingOptional.isPresent()) {
@@ -129,7 +129,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addNewComment(Integer userId, CommentDto commentDto, Integer itemId) {
-        List<Booking> bookings = bookingService.findBookingByUserIdAndFinishAfterNow(userId);
+        List<Booking> bookings = bookingRepository.findBookingByUserIdAndFinishAfterNow(userId);
         boolean userIsBooker = bookings.stream()
                 .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
 
@@ -155,7 +155,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .collect(Collectors.groupingBy(Comment::getItem));
 
-        Map<Item, List<Booking>> bookingsMap = bookingService.findByItemIn(items)
+        Map<Item, List<Booking>> bookingsMap = bookingRepository.findByItemIn(items)
                 .stream()
                 .collect(Collectors.groupingBy(Booking::getItem));
 
