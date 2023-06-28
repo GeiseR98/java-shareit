@@ -30,7 +30,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public Collection<ItemRequestDto> getRequests(Integer userId) {
         utility.checkUser(userId);
-        List<ItemRequest> itemRequests = itemRequestRepository.findByUserId(userId);
+        List<ItemRequest> itemRequests = itemRequestRepository.findByRequestorId(userId);
         return mapToRequestWithItems(itemRequests);
     }
 
