@@ -6,7 +6,10 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @UtilityClass
 public class ItemMapper {
@@ -41,5 +44,14 @@ public class ItemMapper {
         itemWithBooking.setNextBooking(nextBooking);
         itemWithBooking.setComments(comments);
         return itemWithBooking;
+    }
+
+    public static List<ItemDto> mapToItemDto(Iterable<Item> requestItems) {
+        if (requestItems == null) {
+            return Collections.emptyList();
+        }
+        return StreamSupport.stream(requestItems.spliterator(), false)
+                .map(ItemMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

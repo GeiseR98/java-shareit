@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import javax.validation.Valid;
+import java.util.Collection;
 
 
 @RestController
@@ -21,6 +22,12 @@ public class ItemRequestController {
                                @RequestBody @Valid ItemRequestDto itemRequestDto) {
         log.info("Попытка добавить запрос: {}", itemRequestDto);
         return itemRequestService.addNewItemRequest(userId, itemRequestDto);
+    }
+
+    @GetMapping
+    public Collection<ItemRequestDto> getRequest(@RequestHeader(USERID) Integer userId) {
+        log.info("Попытка получить запросы пользователя: {}", userId);
+        return itemRequestService.getRequests(userId);
     }
 
 }
