@@ -9,6 +9,8 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemRepository;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -22,6 +24,13 @@ public class Utility {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
+    private final ItemRequestRepository itemRequestRepository;
+
+
+    public ItemRequest checkItemRequest(Integer requestId) {
+        return itemRequestRepository.findById(requestId).orElseThrow(()
+                -> new NotFoundException(String.format("Запрос с идентификатором =%d не найден", requestId)));
+    }
 
     public void checkOwner(Integer userId, Item item) {
         if (!Objects.equals(userId, item.getOwner().getId())) {
