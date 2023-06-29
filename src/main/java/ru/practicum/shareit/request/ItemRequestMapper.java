@@ -28,10 +28,7 @@ public class ItemRequestMapper {
         itemRequestDto.setId(itemRequest.getId());
         itemRequestDto.setDescription(itemRequest.getDescription());
         itemRequestDto.setCreated(itemRequest.getCreated());
-        itemRequestDto.setItems(itemRequest.getItems() != null ?
-                itemRequest.getItems().stream()
-                        .map(ItemMapper::toDto)
-                        .collect(Collectors.toList()) : null);
+        itemRequestDto.setItems(ItemMapper.mapToItemDto(itemRequest.getItems()) != null ? ItemMapper.mapToItemDto(itemRequest.getItems()) : null);
         return itemRequestDto;
     }
 

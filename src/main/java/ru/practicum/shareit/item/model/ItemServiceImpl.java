@@ -5,11 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.*;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingMapper;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.utility.Utility;
 
@@ -36,7 +40,10 @@ public class ItemServiceImpl implements ItemService {
             throw new ValidationException("Вещь должна быть доступна");
         }
         User user = utility.checkUser(userId);
-        Item item = ItemMapper.toEntity(user, itemDto);
+
+        ItemRequest itemRequest = itemDto.getRequestId() != null ? utility.checkItemRequest(itemDto.getRequestId()) : null;
+
+        Item item = ItemMapper.toEntity(user, itemDto, itemRequest);
         return ItemMapper.toDto(itemRepository.save(item));
     }
 
