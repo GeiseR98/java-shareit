@@ -110,7 +110,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "FROM Booking AS b " +
             "JOIN b.booker AS u " +
             "WHERE u.id = ?1 " +
-            "and b.start < current_timestamp and b.end > current_timestamp " +
+            "and b.start < current_timestamp and b.end > current_timestamp  " +
             "ORDER BY b.start")
     Page<Booking> getCurrentByUserId(Integer userId, Pageable page);
 
