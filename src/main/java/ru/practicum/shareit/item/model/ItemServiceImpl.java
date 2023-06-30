@@ -136,7 +136,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addNewComment(Integer userId, CommentDto commentDto, Integer itemId) {
-        List<Booking> bookings = bookingRepository.findBookingByUserIdAndFinishAfterNow(userId);
+        List<Booking> bookings = bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
         boolean userIsBooker = bookings.stream()
                 .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
 

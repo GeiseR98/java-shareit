@@ -2,10 +2,13 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -25,16 +28,20 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getByUserId(@RequestHeader(USERID) Integer userId,
-                                        @RequestParam(defaultValue = "ALL") String state) {
+                                        @RequestParam(defaultValue = "ALL") String state,
+                                        @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                        @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         log.info("Потытка получить бронирование по ID пользователя: {}", userId);
-        return bookingService.getByUserId(userId, state);
+        return bookingService.getByUserId(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getByOwnerId(@RequestHeader(USERID) Integer userId,
-                                         @RequestParam(defaultValue = "ALL") String state) {
+                                         @RequestParam(defaultValue = "ALL") String state,
+                                         @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                         @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         log.info(String.valueOf("Потытка получить бронирование по ID владельца: {}"), userId);
-        return bookingService.getByOwnerId(userId, state);
+        return bookingService.getByOwnerId(userId, state, from, size);
     }
 
     @PostMapping
