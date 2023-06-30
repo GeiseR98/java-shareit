@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class BookingController {
     private final BookingService bookingService;
     private static final String USERID = "X-Sharer-User-Id";
@@ -40,7 +41,7 @@ public class BookingController {
                                          @RequestParam(defaultValue = "ALL") String state,
                                          @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                          @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
-        log.info(String.valueOf("Потытка получить бронирование по ID владельца: {}"), userId);
+        log.info("Потытка получить бронирование по ID владельца: {}", userId);
         return bookingService.getByOwnerId(userId, state, from, size);
     }
 
@@ -55,7 +56,7 @@ public class BookingController {
     public BookingDto approveBooking(@RequestHeader(USERID) Integer userId,
                                      @PathVariable Integer bookingId,
                                      @RequestParam boolean approved) {
-        log.info(String.valueOf("Попытка подтвердить бронирование с ID {}"), bookingId);
+        log.info("Попытка подтвердить бронирование с ID {}", bookingId);
         return bookingService.approveBooking(userId, bookingId, approved);
     }
 }

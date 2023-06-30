@@ -10,7 +10,6 @@ import ru.practicum.shareit.item.model.Item;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
