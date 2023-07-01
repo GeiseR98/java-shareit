@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,13 +49,13 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toDto(itemRepository.save(item));
     }
 
-    @Override
-    public Collection<ItemDto> getByUserId(Integer userId) {
-        utility.checkUser(userId);
-        return itemRepository.findByOwnerId(userId).stream()
-                .map(ItemMapper::toDto)
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public Collection<ItemDto> getByUserId(Integer userId) {
+//        utility.checkUser(userId);
+//        return itemRepository.findByOwnerId(userId).stream()
+//                .map(ItemMapper::toDto)
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public ItemDto getById(Integer itemId) {
@@ -129,9 +131,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemWithBooking> getItemsByUserId(Integer userId) {
+    public Collection<ItemWithBooking> getItemsByUserId(Integer userId, Integer from, Integer size) {
         utility.checkUser(userId);
-        return mapToItemWithBooking(itemRepository.findByOwnerId(userId));
+        Sort sortByDate = Sort.by(Sort.Direction.ASC, "id");
+        int pageIndex = from / size;
+        Pageable page = PageRequest.of(pageIndex, size, sortByDate);
+
+        return mapToItemWithBooking(itemRepository.findByOwnerId(userId, page).toList());
     }
 
     @Override

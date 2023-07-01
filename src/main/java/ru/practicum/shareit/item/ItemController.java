@@ -10,6 +10,8 @@ import ru.practicum.shareit.item.model.ItemService;
 import ru.practicum.shareit.item.model.ItemWithBooking;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,9 +25,11 @@ public class ItemController {
     private static final String USERID = "X-Sharer-User-Id";
 
     @GetMapping
-    public Collection<ItemWithBooking> getItemsByUserId(@RequestHeader(USERID) Integer userId) {
-        log.info("Колличество вещей пользователя {}: {}", userId, itemService.getByUserId(userId).size());
-        return itemService.getItemsByUserId(userId);
+    public Collection<ItemWithBooking> getItemsByUserId(@RequestHeader(USERID) Integer userId,
+                                                        @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                                        @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
+        log.info("Колличество вещей пользователя {}: {}", userId, itemService.getItemsByUserId(userId, from, size).size());
+        return itemService.getItemsByUserId(userId, from, size);
     }
 
     @GetMapping("/{itemId}")
@@ -67,7 +71,7 @@ public class ItemController {
     public CommentDto addComment(@RequestHeader(USERID) Integer userId,
                                  @RequestBody @Valid CommentDto commentDto,
                                  @PathVariable Integer itemId) {
-        log.info(String.valueOf("Попытка добавить комментарий"), commentDto);
+        log.info("Попытка добавить комментарий {}", commentDto);
         return itemService.addNewComment(userId, commentDto, itemId);
     }
 }
