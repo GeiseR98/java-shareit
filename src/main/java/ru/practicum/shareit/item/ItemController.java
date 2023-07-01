@@ -62,9 +62,11 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> getByQuery(@RequestParam(name = "text") String query) {
+    public List<ItemDto> getByQuery(@RequestParam(name = "text") String query,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                    @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         log.info("Попытка найти вещь по зпросу: {}", query);
-        return itemService.getByQuery(query);
+        return itemService.getByQuery(query, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

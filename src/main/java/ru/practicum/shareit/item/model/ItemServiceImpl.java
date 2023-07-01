@@ -81,11 +81,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getByQuery(String query) {
+    public List<ItemDto> getByQuery(String query, Integer from, Integer size) {
+        Sort sortByDate = Sort.by(Sort.Direction.ASC, "id");
+        int pageIndex = from / size;
+        Pageable page = PageRequest.of(pageIndex, size, sortByDate);
+
         if (query.isBlank()) {
             return new ArrayList<>();
         }
-        List<Item> userItems = itemRepository.findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
+        List<Item> userItems = itemRepository.findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query, page);
 
         return userItems.stream()
                 .filter(Item::getAvailable)

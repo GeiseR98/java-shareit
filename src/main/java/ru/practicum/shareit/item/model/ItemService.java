@@ -15,7 +15,7 @@ public interface ItemService {
 
     ItemDto update(Integer userId, ItemDto itemDto, Integer itemId);
 
-    List<ItemDto> getByQuery(String query);
+    List<ItemDto> getByQuery(String query, Integer from, Integer size);
 
     void removeById(Integer userId, Integer itemId);
 

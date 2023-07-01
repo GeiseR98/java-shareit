@@ -16,7 +16,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     void deleteByOwnerIdAndId(Integer userId, Integer itemId);
 
-    List<Item> findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String query, String query1);
+    List<Item> findItemByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String firstQuery, String secondQuery, Pageable page);
 
     List<Item> findByRequestIdIn(Iterable<Integer> requestIds);
 
