@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @JsonTest
-class ItemRequestJsonTest {
+class RequestJsonTest {
     @Autowired
     private JacksonTester<ItemRequestDto> jsonItemRequest;
 
