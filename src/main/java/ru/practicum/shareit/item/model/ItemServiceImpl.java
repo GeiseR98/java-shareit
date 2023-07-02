@@ -94,7 +94,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void removeById(Integer userId, Integer itemId) {
-        utility.checkOwner(userId, utility.checkItem(itemId));
+        utility.checkOwner(utility.checkUser(userId).getId(), utility.checkItem(itemId));
         itemRepository.deleteByOwnerIdAndId(userId, itemId);
     }
 

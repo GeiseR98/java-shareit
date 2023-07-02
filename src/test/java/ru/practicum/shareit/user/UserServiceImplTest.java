@@ -5,8 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
+import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.model.ItemRepository;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.utility.Utility;
 
@@ -30,6 +32,7 @@ public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+
 
     @Test
     void getAllTest() {
@@ -71,15 +74,12 @@ public class UserServiceImplTest {
         userInDB.setName("ser");
         userInDB.setEmail("test2@mail.ru");
 
-//        when(userRepository.findById(1))
-//                .thenReturn(Optional.of(userInDB));
         when(userRepository.save(userToUpdate))
                 .thenReturn(userToUpdate);
 
         UserDto actualUser = userService.update(userToUpdate.getId(), UserMapper.toDto(userToUpdate));
 
         assertEquals(UserMapper.toDto(userToUpdate), actualUser);
-//        verify(userRepository).findById(1);
         verify(userRepository).save(userToUpdate);
     }
 
@@ -143,6 +143,26 @@ public class UserServiceImplTest {
         assertEquals(UserMapper.toDto(expectedUser), actualUser);
     }
 
+    @Test
+    void removeByIdTest() {
+        User userToDelete = new User();
+        userToDelete.setId(1);
 
+        when(utility.checkUser(1)).thenReturn(userToDelete);
+
+        userService.removeById(userToDelete.getId());
+
+        verify(userRepository).deleteById(1);
+
+    }
+
+    @Test
+    void getByIdShouldThrowExceptionTest() {
+        Integer userId = 1;
+        when(utility.checkUser(userId)).thenThrow(new NotFoundException("error"));
+
+        assertThrows(NotFoundException.class,
+                () -> userService.getById(userId));
+    }
 }
 
