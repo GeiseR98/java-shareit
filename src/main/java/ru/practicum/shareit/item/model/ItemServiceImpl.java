@@ -49,14 +49,6 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toDto(itemRepository.save(item));
     }
 
-//    @Override
-//    public Collection<ItemDto> getByUserId(Integer userId) {
-//        utility.checkUser(userId);
-//        return itemRepository.findByOwnerId(userId).stream()
-//                .map(ItemMapper::toDto)
-//                .collect(Collectors.toList());
-//    }
-
     @Override
     public ItemDto getById(Integer itemId) {
         return ItemMapper.toDto(utility.checkItem(itemId));
