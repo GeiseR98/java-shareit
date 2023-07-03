@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.exception.IllegalArgumentException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.utility.Utility;
@@ -39,7 +40,8 @@ public class BookingServiceImpl implements BookingService {
         }
         Booking booking = BookingMapper.toEntity(user, item, bookingDto);
         booking.setStatus(Status.WAITING);
-        return BookingMapper.toDto(bookingRepository.save(booking));
+        bookingRepository.save(booking);
+        return BookingMapper.toDto(booking);
     }
 
     @Transactional
@@ -56,7 +58,8 @@ public class BookingServiceImpl implements BookingService {
         } else {
             booking.setStatus(Status.REJECTED);
         }
-        return BookingMapper.toDto(bookingRepository.save(booking));
+        bookingRepository.save(booking);
+        return BookingMapper.toDto(booking);
     }
 
     @Override
@@ -82,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 return BookingMapper.toDtoList(bookingRepository.findBookingByUserIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED, page).toList());
         }
-        throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
+        throw new IllegalArgumentException("Unknown state: UNSUPPORTED_STATUS");
     }
 
     @Override
@@ -107,7 +110,7 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 return BookingMapper.toDtoList(bookingRepository.findBookingByOwnerIdAndByStatusContainingIgnoreCase(userId, Status.REJECTED, page).toList());
         }
-        throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
+        throw new IllegalArgumentException("Unknown state: UNSUPPORTED_STATUS");
     }
 
     @Override

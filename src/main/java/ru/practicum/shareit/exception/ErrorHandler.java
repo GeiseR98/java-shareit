@@ -25,6 +25,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerIllegalArgumentException(final IllegalArgumentException e) {
+        log.info("Ошибка 400: {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlerItemAlreadyExistException(final AlreadyExistException e) {
         log.info("Ошибка 409: {}", e.getMessage());
