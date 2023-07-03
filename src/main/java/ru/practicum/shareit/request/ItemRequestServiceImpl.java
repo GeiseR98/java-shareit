@@ -71,7 +71,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return ItemRequestMapper.toDto(itemRequest);
     }
 
-    private List<ItemRequestDto> mapToRequestWithItems(Iterable<ItemRequest> itemRequests) {
+    public List<ItemRequestDto> mapToRequestWithItems(Iterable<ItemRequest> itemRequests) {
         List<ItemRequestDto> itemRequestWithItems = new ArrayList<>();
         List<Integer> requestIds = new ArrayList<>();
 

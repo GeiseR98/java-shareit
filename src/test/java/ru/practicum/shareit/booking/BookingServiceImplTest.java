@@ -33,13 +33,7 @@ class BookingServiceImplTest {
     private Utility utility;
 
     @Mock
-    private ItemRepository itemRepository;
-
-    @Mock
     private BookingRepository bookingRepository;
-
-    @Mock
-    private UserRepository userRepository;
 
     @InjectMocks
     private BookingServiceImpl bookingService;
