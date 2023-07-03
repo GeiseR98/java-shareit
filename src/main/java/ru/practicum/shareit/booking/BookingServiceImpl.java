@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.exception.IllegalArgumentException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.utility.Utility;
@@ -122,11 +121,6 @@ public class BookingServiceImpl implements BookingService {
     public Optional<Booking> findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(Integer id, LocalDateTime end, Status status) {
         return bookingRepository.findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(id, end, status);
     }
-
-//    @Override
-//    public List<Booking> findBookingByUserIdAndFinishAfterNow(Integer userId) {
-//        return bookingRepository.findBookingByUserIdAndFinishAfterNow(userId);
-//    }
 
     @Override
     public List<Booking> findByItemIn(Iterable<Item> items) {

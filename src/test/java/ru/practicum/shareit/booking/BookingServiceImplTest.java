@@ -8,17 +8,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemRepository;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -118,7 +114,7 @@ class BookingServiceImplTest {
         List<BookingDto> actualBookingListRejected = bookingService.getByUserId(1, "REJECTED", 1, 10);
         assertEquals(BookingMapper.toDtoList(bookings), actualBookingListRejected);
         assertThrows(IllegalArgumentException.class,
-                () -> bookingService.getByUserId(1, "UNKNOWN_STATUS", 1, 10));
+                () -> bookingService.getByUserId(1, "WRONG", 1, 10));
     }
 
     @Test

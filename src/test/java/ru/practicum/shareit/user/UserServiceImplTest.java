@@ -5,21 +5,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.model.ItemRepository;
-import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.utility.Utility;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
@@ -32,7 +29,6 @@ public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
-
 
     @Test
     void getAllTest() {
@@ -50,6 +46,7 @@ public class UserServiceImplTest {
 
         assertEquals(usersList, actualUserList);
     }
+
     @Test
     void saveUserTest() {
         UserDto userToSave = new UserDto();
@@ -131,7 +128,6 @@ public class UserServiceImplTest {
         verify(userRepository).save(any(User.class));
     }
 
-
     @Test
     void getByIdTest() {
         Integer userId = 1;
@@ -153,7 +149,6 @@ public class UserServiceImplTest {
         userService.removeById(userToDelete.getId());
 
         verify(userRepository).deleteById(1);
-
     }
 
     @Test
