@@ -20,7 +20,6 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.utility.Utility;
 
 import java.time.LocalDateTime;
@@ -44,9 +43,6 @@ public class ItemServiceImplTest {
 
     @Mock
     private CommentRepository commentRepository;
-
-    @Mock
-    private UserRepository userRepository;
 
     @InjectMocks
     private ItemServiceImpl itemService;

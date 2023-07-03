@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
-import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.User;
@@ -15,10 +15,8 @@ import ru.practicum.shareit.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -73,4 +71,39 @@ class RequestServiceImplTest {
         assertEquals(itemRequestWithItems, actualRequests);
     }
 
+    @Test
+    void getAllRequestTest() {
+        ItemRequest itemRequest = new ItemRequest();
+        itemRequest.setRequestor(new User());
+        List<ItemRequest> itemRequests = new ArrayList<>();
+        itemRequests.add(itemRequest);
+        itemRequest.setItems(new ArrayList<>());
+        int from = 1;
+        int size = 10;
+        int pageIndex = from / size;
+        Sort sortByDate = Sort.by(Sort.Direction.ASC, "created");
+        Pageable page = PageRequest.of(pageIndex, size, sortByDate);
+        Page<ItemRequest> itemRequestPage = new PageImpl<>(itemRequests, page, itemRequests.size());
+
+        when(itemRequestRepository.findAll(any(Pageable.class))).thenReturn(itemRequestPage);
+
+        List<ItemRequestDto> actualItemRequestList = itemRequestService.getAllRequest(1, 1, 10);
+        assertEquals(ItemRequestMapper.toDtoList(itemRequests), actualItemRequestList);
+
+    }
+
+    @Test
+    void getRequestByIdTest() {
+        ItemRequest itemRequest = new ItemRequest();
+        Item item = new Item();
+        List<Item> items = new ArrayList<>();
+        items.add(item);
+        when(utility.checkUser(1)).thenReturn(new User());
+        when(utility.checkItemRequest(1)).thenReturn(itemRequest);
+        itemRequest.setItems(items);
+
+        ItemRequestDto actualItemRequest = itemRequestService.getRequestById(1, 1);
+
+        assertEquals(ItemRequestMapper.toDto(itemRequest), actualItemRequest);
+    }
 }
