@@ -9,5 +9,6 @@ public enum Status {
     CURRENT,  // текущие
     PAST,     // завершенные
     FUTURE,   // будущие
-    UNSUPPORTED_STATUS
+    UNSUPPORTED_STATUS,
+    WRONG
 }

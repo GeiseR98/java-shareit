@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -10,6 +11,8 @@ import ru.practicum.shareit.item.model.ItemService;
 import ru.practicum.shareit.item.model.ItemWithBooking;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,14 +21,17 @@ import java.util.List;
 @RequestMapping(path = "/items")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class ItemController {
     private final ItemService itemService;
     private static final String USERID = "X-Sharer-User-Id";
 
     @GetMapping
-    public Collection<ItemWithBooking> getItemsByUserId(@RequestHeader(USERID) Integer userId) {
-        log.info("Колличество вещей пользователя {}: {}", userId, itemService.getByUserId(userId).size());
-        return itemService.getItemsByUserId(userId);
+    public Collection<ItemWithBooking> getItemsByUserId(@RequestHeader(USERID) Integer userId,
+                                                        @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                                        @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
+        log.info("Колличество вещей пользователя {}: {}", userId, itemService.getItemsByUserId(userId, from, size).size());
+        return itemService.getItemsByUserId(userId, from, size);
     }
 
     @GetMapping("/{itemId}")
@@ -58,16 +64,18 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> getByQuery(@RequestParam(name = "text") String query) {
+    public List<ItemDto> getByQuery(@RequestParam(name = "text") String query,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                    @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
         log.info("Попытка найти вещь по зпросу: {}", query);
-        return itemService.getByQuery(query);
+        return itemService.getByQuery(query, from, size);
     }
 
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(USERID) Integer userId,
                                  @RequestBody @Valid CommentDto commentDto,
                                  @PathVariable Integer itemId) {
-        log.info(String.valueOf("Попытка добавить комментарий"), commentDto);
+        log.info("Попытка добавить комментарий {}", commentDto);
         return itemService.addNewComment(userId, commentDto, itemId);
     }
 }

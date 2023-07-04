@@ -4,9 +4,13 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @UtilityClass
 public class ItemMapper {
@@ -16,17 +20,19 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable()
+                item.getAvailable(),
+                item.getRequest() != null ? item.getRequest().getId() : null
         );
     }
 
-    public static Item toEntity(User owner, ItemDto itemDto) {
+    public static Item toEntity(User owner, ItemDto itemDto, ItemRequest request) {
         Item item = new Item();
         item.setId(itemDto.getId());
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setOwner(owner);
         item.setAvailable(itemDto.getAvailable());
+        item.setRequest(request);
         return item;
     }
 
@@ -40,6 +46,16 @@ public class ItemMapper {
         itemWithBooking.setLastBooking(lastBooking);
         itemWithBooking.setNextBooking(nextBooking);
         itemWithBooking.setComments(comments);
+        itemWithBooking.setRequestId(item.getRequest() != null ? item.getRequest().getId() : null);
         return itemWithBooking;
+    }
+
+    public static List<ItemDto> mapToItemDto(Iterable<Item> requestItems) {
+        if (requestItems == null) {
+            return Collections.emptyList();
+        }
+        return StreamSupport.stream(requestItems.spliterator(), false)
+                .map(ItemMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
