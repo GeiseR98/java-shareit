@@ -1,4 +1,4 @@
-package ru.practicum.gateway.booking.dto;
+package ru.practicum.gateway.booking;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
