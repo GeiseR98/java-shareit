@@ -46,11 +46,11 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> getByQuery(@RequestParam String query,
+    public ResponseEntity<Object> getByQuery(@RequestParam String text,
                                           @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                           @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
-        log.info("Попытка найти вещь по зпросу: {}", query);
-        return itemClient.getByQuery(query, from, size);
+        log.info("Попытка найти вещь по зпросу: {}", text);
+        return itemClient.getByQuery(text, from, size);
     }
 
     @GetMapping("/{itemId}")
