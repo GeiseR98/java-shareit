@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users
 (
     id    BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
     name  varchar(50)                        NOT NULL,
-    email varchar(100)                        NOT NULL,
+    email varchar(100)                       NOT NULL,
     UNIQUE (email)
 );
 

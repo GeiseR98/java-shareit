@@ -97,6 +97,10 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "ORDER BY b.start DESC")
     Page<Booking> findBookingByOwnerIdAndByStatusContainingIgnoreCase(Integer userId, Status state, Pageable page);
 
+    List<Booking> getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(Integer userId, Integer itemId, LocalDateTime end);
+
+    Page<Booking> findByBookerIdAndEndIsBefore(Integer bookerId, LocalDateTime currentDateTime, Pageable pageable);
+
     Optional<Booking> findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(Integer id, LocalDateTime start, Status status);
 
     Optional<Booking> findFirstByItemIdAndEndAfterAndStatusOrderByStartAsc(Integer id, LocalDateTime end, Status status);
@@ -112,6 +116,4 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "and b.start < current_timestamp and b.end > current_timestamp  " +
             "ORDER BY b.start")
     Page<Booking> getCurrentByUserId(Integer userId, Pageable page);
-
-    List<Booking> getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(Integer userId, Integer itemId, LocalDateTime end);
 }

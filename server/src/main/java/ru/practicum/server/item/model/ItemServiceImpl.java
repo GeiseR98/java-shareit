@@ -138,9 +138,22 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addNewComment(Integer userId, CommentDto commentDto, Integer itemId) {
-        List<Booking> bookings = bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
-        boolean userIsBooker = bookings.stream()
-                .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
+
+        Sort sort = Sort.by("start").descending();
+
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+
+        List<Booking> bookings = bookingRepository.findByBookerIdAndEndIsBefore(userId, LocalDateTime.now(), pageable).toList();
+//        List<Booking> bookings = bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
+//        boolean userIsBooker = bookings.stream()
+//                .anyMatch(booking -> Objects.equals(booking.getItem().getId(), itemId));
+        boolean userIsBooker = false;
+        for (Booking booking : bookings) {
+            if (booking.getItem().getId().equals(itemId)) {
+                userIsBooker = true;
+                break;
+            }
+        }
 
         if (!userIsBooker) {
             throw new ValidationException("Пользователь не брал в аренду вещь");
