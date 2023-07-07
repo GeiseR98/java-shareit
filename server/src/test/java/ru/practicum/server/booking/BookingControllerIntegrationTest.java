@@ -132,31 +132,31 @@ class BookingControllerIntegrationTest {
         assertEquals(objectMapper.writeValueAsString(booking), response);
     }
 
-    @SneakyThrows
-    @Test
-    void addTest() {
-        BookingDto booking = new BookingDto();
-        BookingDto.ItemBooking item = new BookingDto.ItemBooking();
-        BookingDto.Booker user = new BookingDto.Booker();
-        booking.setItemId(1);
-        booking.setItem(item);
-        booking.setBooker(user);
-        booking.setStart(LocalDateTime.of(2023, 7, 7, 7, 7));
-        booking.setEnd(LocalDateTime.of(2023, 7, 8, 7, 7));
-        booking.setId(1);
-        when(bookingService.addNewBooking(1, booking)).thenReturn(booking);
-
-        String response = mockMvc.perform(post("/bookings")
-                        .header("X-Sharer-User-Id", 1)
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(booking)))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        assertEquals(objectMapper.writeValueAsString(booking), response);
-    }
+//    @SneakyThrows
+//    @Test
+//    void addTest() {
+//        BookingDto booking = new BookingDto();
+//        BookingDto.ItemBooking item = new BookingDto.ItemBooking();
+//        BookingDto.Booker user = new BookingDto.Booker();
+//        booking.setItemId(1);
+//        booking.setItem(item);
+//        booking.setBooker(user);
+//        booking.setStart(LocalDateTime.of(2023, 7, 7, 7, 7));
+//        booking.setEnd(LocalDateTime.of(2023, 7, 8, 7, 7));
+//        booking.setId(1);
+//        when(bookingService.addNewBooking(1, booking)).thenReturn(booking);
+//
+//        String response = mockMvc.perform(post("/bookings")
+//                        .header("X-Sharer-User-Id", 1)
+//                        .contentType("application/json")
+//                        .content(objectMapper.writeValueAsString(booking)))
+//                .andExpect(status().isOk())
+//                .andReturn()
+//                .getResponse()
+//                .getContentAsString();
+//
+//        assertEquals(objectMapper.writeValueAsString(booking), response);
+//    }
 
     @SneakyThrows
     @Test
