@@ -246,102 +246,98 @@ public class ItemServiceImplTest {
         verify(itemRepository, never()).deleteByOwnerIdAndId(anyInt(), anyInt());
     }
 
-//    @Test
-//    public void addNewComment_UserIsBooker_Success() {
-//        User user = new User();
-//        user.setId(1);
-//        user.setName("User1");
-//
-//        Item item = new Item();
-//        item.setId(1);
-//        item.setName("Item1");
-//
-//        Booking booking = new Booking();
-//        booking.setId(1);
-//        booking.setItem(item);
-//        booking.setBooker(user);
-//
-//        Comment comment = new Comment();
-//        comment.setText("Test comment");
-//        comment.setItem(item);
-//        comment.setAuthor(user);
-//        comment.setCreated(LocalDateTime.now());
-//
-//        List<Booking> bookings = Collections.singletonList(booking);
-//
-//        Sort sort = Sort.by("start").descending();
-//
-//        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
-//
-//        when(bookingRepository.findByBookerIdAndEndIsBefore(eq(user.getId()), any(LocalDateTime.class), pageable).toList())
-//                .thenReturn(bookings);
-//
-//
-////        when(bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class)))
-////                .thenReturn(bookings);
-//        when(utility.checkItem(item.getId())).thenReturn(item);
-//        when(utility.checkUser(user.getId())).thenReturn(user);
-//        when(commentRepository.save(any(Comment.class))).thenReturn(comment);
-//
-//        CommentDto result = itemService.addNewComment(user.getId(), CommentMapper.toDto(comment), item.getId());
-//
-//        assertNotNull(result);
-//        assertEquals(comment.getText(), result.getText());
-//
-//        verify(bookingRepository).findByBookerIdAndEndIsBefore(eq(user.getId()), any(LocalDateTime.class), pageable).toList();
-//        verify(commentRepository).save(any(Comment.class));
-//    }
+    @Test
+    public void addNewComment_UserIsBooker_Success() {
+        User user = new User();
+        user.setId(1);
+        user.setName("User1");
 
-//    @Test
-//    public void addNewComment_UserIsNotBooker_ThrowsValidationException() {
-//        User user = new User();
-//        user.setId(1);
-//        user.setName("User1");
-//
-//        Item item = new Item();
-//        item.setId(1);
-//        item.setName("Item1");
-//
-//
-//        List<Booking> bookings = Collections.emptyList();
-//
-//        when(bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class)))
-//                .thenReturn(bookings);
-//
-//        assertThrows(ValidationException.class, () -> {
-//            itemService.addNewComment(user.getId(), new CommentDto(), item.getId());
-//        });
-//
-//        verify(bookingRepository).getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class));
-//    }
-//
-//    @Test
-//    public void addNewComment_ItemNotFound_ThrowsNotFoundException() {
-//        User user = new User();
-//        user.setId(1);
-//        user.setName("User1");
-//
-//        Item item = new Item();
-//        item.setId(1);
-//        item.setName("Item1");
-//
-//        Booking booking = new Booking();
-//        booking.setId(1);
-//        booking.setItem(item);
-//        booking.setBooker(user);
-//
-//        List<Booking> bookings = Collections.singletonList(booking);
-//
-//        when(bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class)))
-//                .thenReturn(bookings);
-//        when(utility.checkItem(item.getId())).thenThrow(new NotFoundException("вещь не найдена"));
-//
-//        assertThrows(NotFoundException.class, () -> {
-//            itemService.addNewComment(user.getId(), new CommentDto(), item.getId());
-//        });
-//
-//        verify(bookingRepository).getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class));
-//    }
+        Item item = new Item();
+        item.setId(1);
+        item.setName("Item1");
+
+        Booking booking = new Booking();
+        booking.setId(1);
+        booking.setItem(item);
+        booking.setBooker(user);
+
+        Comment comment = new Comment();
+        comment.setText("Test comment");
+        comment.setItem(item);
+        comment.setAuthor(user);
+        comment.setCreated(LocalDateTime.now());
+
+        List<Booking> bookings = Collections.singletonList(booking);
+
+        Sort sort = Sort.by("start").descending();
+
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+
+        when(bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class)))
+                .thenReturn(bookings);
+        when(utility.checkItem(item.getId())).thenReturn(item);
+        when(utility.checkUser(user.getId())).thenReturn(user);
+        when(commentRepository.save(any(Comment.class))).thenReturn(comment);
+
+        CommentDto result = itemService.addNewComment(user.getId(), CommentMapper.toDto(comment), item.getId());
+
+        assertNotNull(result);
+        assertEquals(comment.getText(), result.getText());
+
+        verify(bookingRepository).getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class));
+        verify(commentRepository).save(any(Comment.class));
+    }
+
+    @Test
+    public void addNewComment_UserIsNotBooker_ThrowsValidationException() {
+        User user = new User();
+        user.setId(1);
+        user.setName("User1");
+
+        Item item = new Item();
+        item.setId(1);
+        item.setName("Item1");
+
+
+        List<Booking> bookings = Collections.emptyList();
+
+        when(bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class)))
+                .thenReturn(bookings);
+
+        assertThrows(ValidationException.class, () -> {
+            itemService.addNewComment(user.getId(), new CommentDto(), item.getId());
+        });
+
+        verify(bookingRepository).getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class));
+    }
+
+    @Test
+    public void addNewComment_ItemNotFound_ThrowsNotFoundException() {
+        User user = new User();
+        user.setId(1);
+        user.setName("User1");
+
+        Item item = new Item();
+        item.setId(1);
+        item.setName("Item1");
+
+        Booking booking = new Booking();
+        booking.setId(1);
+        booking.setItem(item);
+        booking.setBooker(user);
+
+        List<Booking> bookings = Collections.singletonList(booking);
+
+        when(bookingRepository.getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class)))
+                .thenReturn(bookings);
+        when(utility.checkItem(item.getId())).thenThrow(new NotFoundException("вещь не найдена"));
+
+        assertThrows(NotFoundException.class, () -> {
+            itemService.addNewComment(user.getId(), new CommentDto(), item.getId());
+        });
+
+        verify(bookingRepository).getBookingByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(eq(user.getId()), eq(item.getId()), any(LocalDateTime.class));
+    }
 
     @Test
     public void testGetItemById_WithMatchingUserId() {
