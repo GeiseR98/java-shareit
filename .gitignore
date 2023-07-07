@@ -15,6 +15,7 @@ target/
 
 ### db ###
 /db
+/server/db
 
 ### IntelliJ IDEA ###
 .idea
